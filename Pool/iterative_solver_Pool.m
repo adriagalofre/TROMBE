@@ -1,0 +1,49 @@
+function sol=iterative_solver_Pool(m_in,m_evap,m_out,cp,T,T_amb,T_cel,h_evap,A_1,A_2,A_3,A_4,alpha_1_amb,alpha_1_int,alpha_2_int,alpha_3_int, alpha_4_int,epsilon,epsilon_1_star,sigma,lambda_2,R,F)
+  
+    #INICIALITZACIO DE VARIABLES
+    T_w0=[10 10 10 10];                 #INITIAL GUESS
+    T_w=T_w0;
+    delta=1e-08;                       #TOLERANCIA SOLUCIO ITERATIVA
+    err=1;                              #VAR. AUX.
+    n=1;                               #VAR. AUX. 
+    T_des=25;                          #TEMPERATURA AIRE DESHUMECTADORA. EN REALITAT DEPEN DE T_int i dels cabals
+    #LOOP ITERACIONS SOLUCIO
+    do
+      #TEMPERATURA INTERIOR  
+      T_int=(m_in*cp*T_des+m_evap*h_evap+alpha_1_int*T_w(1)*A_1+alpha_2_int*T_w(2)*A_2...
+      +alpha_3_int*T_w(3)*A_3+alpha_4_int*T_w(4)*A_4)...
+      /(m_out*cp+alpha_1_int*A_1+alpha_2_int*A_2+alpha_3_int*A_3+alpha_4_int*A_4);
+      #RADIACIO TERMICA
+      [qrad,g]=q_radiacio_Pool(F,epsilon,sigma,T_w);
+      #RADIACIO SOLAR
+      [qrads,gs]=q_radiacio_solar_Pool(F,epsilon,R,sigma,T,T_w);
+      qrads_1_star=(R-1)*800+T*gs(1);
+      
+      #TEMPERATURES PARETS
+      T_w(1)=(epsilon(1)*g(1)-qrads(1)+epsilon_1_star*sigma*(T_cel^4)-qrads_1_star+alpha_1_int*T_int+alpha_1_amb*T_amb)...
+              /(epsilon(1)*sigma*(T_w(1)^3)+epsilon_1_star*sigma*(T_w(1)^3)+alpha_1_int+alpha_1_amb);
+      T_w(2)=(epsilon(2)*g(2)-qrads(2)+alpha_2_int*T_int+m_evap*h_evap)...
+              /(epsilon(2)*sigma*(T_w(2)^3)+alpha_2_int);
+      T_w(3)=(epsilon(3)*g(3)-qrads(3)+alpha_3_int*T_int)...
+              /(epsilon(3)*sigma*(T_w(3)^3)+alpha_3_int);
+      
+      T_w(4)=(epsilon(4)*g(4)-qrads(4)+alpha_4_int*T_int)...
+              /(epsilon(4)*sigma*(T_w(4)^3)+alpha_4_int);
+      
+      T_wn(n,1)=T_w(1);
+      T_wn(n,2)=T_w(2);
+      T_wn(n,3)=T_w(3);
+      T_wn(n,4)=T_w(4);
+      if n>1
+      err(n)=max(abs([T_wn(n,:)-T_wn(n-1,:)]))
+      else
+      err(n)=max(abs((T_wn(n,:)-T_w0(:)')))
+      end
+      sol(n,:)=[n T_int qrad' T_w err(n)]
+      
+      if n>50
+        err(n)=0;
+      end
+      n=n+1;
+    until (err(n-1)<delta)
+ end
