@@ -1,13 +1,15 @@
 function sol=iterative_solver_Pool(m_in,m_evap,m_out,cp,T,T_amb,T_cel,h_evap,A_1,A_2,A_3,A_4,alpha_1_amb,alpha_1_int,alpha_2_int,alpha_3_int, alpha_4_int,epsilon,epsilon_1_star,sigma,lambda_2,R,F)
   
     #INICIALITZACIO DE VARIABLES
-    T_w0=[10 10 10 10];                 #INITIAL GUESS
+    T_w0=[283.15 283.15 283.15 283.15];                 #INITIAL GUESS
     T_w=T_w0;
     delta=1e-08;                       #TOLERANCIA SOLUCIO ITERATIVA
-    err=1;                              #VAR. AUX.
+    err=1;                             #VAR. AUX.
     n=1;                               #VAR. AUX. 
-    T_des=25;                          #TEMPERATURA AIRE DESHUMECTADORA. EN REALITAT DEPEN DE T_int i dels cabals
-    #LOOP ITERACIONS SOLUCIO
+    
+	T_des=22+273.15;                   #TEMPERATURA AIRE DESHUMECTADORA. EN REALITAT DEPEN DE T_int i dels cabals
+    
+	#LOOP ITERACIONS SOLUCIO
     do
       #TEMPERATURA INTERIOR  
       T_int=(m_in*cp*T_des+m_evap*h_evap+alpha_1_int*T_w(1)*A_1+alpha_2_int*T_w(2)*A_2...
@@ -35,15 +37,16 @@ function sol=iterative_solver_Pool(m_in,m_evap,m_out,cp,T,T_amb,T_cel,h_evap,A_1
       T_wn(n,3)=T_w(3);
       T_wn(n,4)=T_w(4);
       if n>1
-      err(n)=max(abs([T_wn(n,:)-T_wn(n-1,:)]))
+      err(n)=max(abs([T_wn(n,:)-T_wn(n-1,:)]));
       else
-      err(n)=max(abs((T_wn(n,:)-T_w0(:)')))
+      err(n)=max(abs((T_wn(n,:)-T_w0(:)')));
       end
-      sol(n,:)=[n T_int qrad' T_w err(n)]
-      
+      sol(n,:)=[n T_int-273.15 qrad(1) qrad(2) qrad(3) qrad(4) qrad(1)*A_1+qrad(2)*A_2+qrad(3)*A_3+qrad(4)*A_4 T_w(1)-273.15 T_w(2)-273.15 T_w(3)-273.15 T_w(4)-273.15 err(n)];
+
       if n>50
-        err(n)=0;
+        err(n)=-1;
       end
+	  
       n=n+1;
     until (err(n-1)<delta)
  end

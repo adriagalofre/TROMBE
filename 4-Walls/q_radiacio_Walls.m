@@ -1,4 +1,4 @@
-function [qrad,g] = q_radiacio_Pool(F,epsilon,sigma,T_w)
+function [qrad,g] = q_radiacio_Walls(F,epsilon,sigma,T_w)
 	#aux=(1-epsilon)*(-1);
     #aux_1= [aux(1)*F(1,:); aux(2)*F(2,:); aux(3)*F(3,:); aux(4)*F(4,:)];
     #A=eye(length(T_w))-aux_1;

@@ -40,7 +40,7 @@ cp=1000;
 T_hab=22+273.15;
 T_amb=10+273.15;
 T_cel=-10.145+273.15;
-m=7*(((L_2*L_3)/2)*W)*rho_a*(1/3600);
+m=7*(((L_2*L_3)/2)*W)*rho_a*(1/3600)
 
 #BALANÇ ENERGETIC INTERIOR RECINTE
 #FACTORS DE VISIO
@@ -48,5 +48,9 @@ m=7*(((L_2*L_3)/2)*W)*rho_a*(1/3600);
 
 
 # ITERACIONS SOLUCIO TEMPERATURA
-sol=iterative_solver(m,cp,T,T_amb,T_cel, T_hab, A_1,A_2,A_3,e_2,alpha_1_amb,alpha_1_int, alpha_2_hab,alpha_2_int,alpha_3_int,epsilon,epsilon_1_star,sigma,lambda_2,R,F)
+sol=iterative_solver(m,cp,T,T_amb,T_cel, T_hab, A_1,A_2,A_3,e_2,alpha_1_amb,alpha_1_int, alpha_2_hab,alpha_2_int,alpha_3_int,epsilon,epsilon_1_star,sigma,lambda_2,R,F);
 
+plot(sol(:,1),sol(:,2))
+title("T_{int} Convergence");
+xlabel("N Iterations");
+ylabel("T_{int} (C)");

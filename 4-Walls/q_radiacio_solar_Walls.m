@@ -1,4 +1,4 @@
-function [qrads, gs] = q_radiacio_solar_Pool(F,epsilon,R,sigma,T,T_w)
+function [qrads, gs] = q_radiacio_solar_Walls(F,epsilon,R,sigma,T,T_w)
 	#aux=(1-epsilon)*(-1);
     #aux(1)=R;
     #aux_1= [aux(1)*F(1,:); aux(2)*F(2,:); aux(3)*F(3,:); aux(4)*F(4,:)];
