@@ -1,0 +1,13 @@
+Explicació Carpetes
+
+-MurTrombe: Replica de l'exercici MurTrombe. Funciona Correctament.
+
+-4-Walls: Implementació de l'exercici MurTrombe però, en comptes de que auqest sigui un recinte triangular, ara és un recinte quadrangular. Per a comprovar que funcionava correctament, hi ha un costat de longitud variable, per tant amb el mateix codi es pot simular un MurTrombe triangular.
+
+-Pool: 1er pas cap a la solució de la piscina. Aquesta impementació és basa en:
+       1.Recinte rectangular.
+       2.Un dels laterals és una paret-vidre.
+       3.El terra és la piscina.
+       4.La temperatura de l'aire de la deshumectadora és constant.
+       5.El cabal d'evaporació també és constant.
+       6. Encara no s'ha tingut en compte la humitat.

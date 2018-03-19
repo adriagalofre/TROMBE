@@ -75,7 +75,7 @@ m_out=m_in+m_evap;
 
 
 # ITERACIONS SOLUCIO TEMPERATURA
-sol=iterative_solver_Pool(m_in,m_evap,m_out,cp,T,T_amb,T_cel,h_evap,A_1,A_2,A_3,A_4,alpha_1_amb,alpha_1_int, alpha_2_int,alpha_3_int, alpha_4_int,epsilon,epsilon_1_star,sigma,lambda_4,R,F)
+sol=iterative_solver_Pool(m_in,m_evap,m_out,cp,T,T_amb,T_cel,h_evap,A_1,A_2,A_3,A_4,alpha_1_amb,alpha_1_int, alpha_2_int,alpha_3_int, alpha_4_int,epsilon,epsilon_1_star,sigma,lambda_4,R,F);
 
 plot(sol(:,1),sol(:,2))
 title("T_{int} Convergence");
