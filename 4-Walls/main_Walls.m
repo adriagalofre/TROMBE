@@ -66,7 +66,7 @@ m=7*((L_4*L_3)*W+((L_2-L_3)*L_4)*W/2)*rho_a*(1/3600);
 
 
 # ITERACIONS SOLUCIO TEMPERATURA
-sol=iterative_solver_Walls(m,cp,T,T_amb,T_cel,T_hab,A_1,A_2,A_3,A_4,e_4,alpha_1_amb,alpha_1_int, alpha_2_int,alpha_3_int, alpha_4_int,alpha_4_hab,epsilon,epsilon_1_star,sigma,lambda_4,R,F);
+sol=iterative_solver_Walls(m,cp,T,T_amb,T_cel,T_hab,A_1,A_2	,A_3,A_4,e_4,alpha_1_amb,alpha_1_int, alpha_2_int,alpha_3_int, alpha_4_int,alpha_4_hab,epsilon,epsilon_1_star,sigma,lambda_4,R,F);
 				
 plot(sol(:,1),sol(:,2))
 title("T_{int} Convergence");

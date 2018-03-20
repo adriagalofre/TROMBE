@@ -32,6 +32,7 @@ A_1=L_1*W;
 A_2=L_2*W;
 A_3=L_3*W;
 A_4=L_4*W;
+A_pool=A_2;
 
 #DADES - PROP TERMIQUES
 alpha_1_int=10;
@@ -46,28 +47,35 @@ epsilon_1_star=0.9;
 sigma= 5.670373e-08;
 
 #AIGUA PISCINA
-h_evap=2500;                           #CALOR LATENT DE VAPORITZACIO. APROXIMAT. KJ/KG
+h_evap=2500;                           #CALOR LATENT DE VAPORITZACIO. APROXIMAT. kJ/KG
 #h_evap=0;
+n=(10)/A_2;
+N=0;
 	
 #VIDRE
 R=0.1;
 T=0.85;
 A=0.05;
-
-#PARETS
+#PARET
 rho_3s=0.7;
 rho_4s=0.7;
-lambda_4=0.5;
 rho_a=1;
 cp=1000;
 
 #CONDICIONS DE CONTORN
-#T_hab=22+273.15;
+
 T_amb=10+273.15;
 T_cel=-10.145+273.15;
-m_in=7*((L_4*L_3)*W)*rho_a*(1/3600);
-m_evap=0.05*m_in;                                       #HIPOTESI CABAL EVAPORACIO CONSTANT
-m_out=m_in+m_evap;
+
+#m_evap=1*m_in;                                      #HIPOTESI CABAL EVAPORACIO CONSTANT/
+#m_evap=0;
+Ga=0.65;
+We=0.020;
+Was=0.0225;
+m_evap=(A_pool*((16+133*n)*(We-Ga*Was))+0.1*N)/3600            #Bernier Formula with: n=nadadors/m², N=espectadors, Ga=Grau saturació, We(kgag/Kga) H.Abs del aire saturat
+														# a la temperatura de l'aigua de la piscina. Was H.Abs del aire saturat a la temperatura de l'aire interior.
+m_out=7*((L_4*L_3)*W)*rho_a*(1/3600);
+m_in=m_out-m_evap;
 
 #BALANC ENERGETIC INTERIOR RECINTE
 #FACTORS DE VISIO
@@ -75,9 +83,12 @@ m_out=m_in+m_evap;
 
 
 # ITERACIONS SOLUCIO TEMPERATURA
-sol=iterative_solver_Pool(m_in,m_evap,m_out,cp,T,T_amb,T_cel,h_evap,A_1,A_2,A_3,A_4,alpha_1_amb,alpha_1_int, alpha_2_int,alpha_3_int, alpha_4_int,epsilon,epsilon_1_star,sigma,lambda_4,R,F);
-
-plot(sol(:,1),sol(:,2))
-title("T_{int} Convergence");
-xlabel("N Iterations");
-ylabel("T_{int} (C)");
+ 
+	sol=iterative_solver_Pool(m_in,m_evap,m_out,cp,T,T_amb,T_cel,h_evap,A_1,A_2,A_3,A_4,alpha_1_amb,alpha_1_int, alpha_2_int,alpha_3_int, alpha_4_int,epsilon,epsilon_1_star,sigma,R,F);
+	
+	plot(sol(:,1),sol(:,2),";T_{int};",sol(:,1),sol(:,8),";T_{w1};",sol(:,1),sol(:,9),";T_{w2};",sol(:,1),sol(:,10),";T_{w3};",sol(:,1), sol(:,11),";T_{w4};")
+	title("T_{int} Convergence");
+	xlabel("N Iterations");
+	ylabel("T (C)");
+	#legend("T_{int}","T_{w1}","T_{w2}","T_{w3}","T_{w4}");
+	#h=legend("show");
